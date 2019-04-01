@@ -1,0 +1,80 @@
+#include<iostream>
+using namespace std;
+#define size 16
+
+char pai[4] = { 'A', 'B', 'C', 'D' }; //A=~|,B=|_,C=|~ ,D=_|
+char Board[size][size];
+void ChessBoard(int tr, int tc, int dr, int dc, int sizes);
+
+int main()
+{
+	int tr, tc, dr, dc;
+	cin >> tr >> tc >> dr >> dc;
+	
+	Board[dr][dc] = '*';
+
+	ChessBoard( tr, tc, dr, dc, size);
+	
+	for (int i = 1; i <= size; i++)
+	{
+		for (int o = 1; o <= size; o++)
+		{
+			cout << Board[i][o] << " ";
+		}
+		cout << endl;
+	}
+	return 0;
+}
+
+void ChessBoard(int tr, int tc, int dr, int dc, int sizes)
+{
+	if (sizes == 1) { return; }
+	char t;
+	int s = sizes / 2;
+
+	if (dr < tr + s && dc < tc + s) { t = pai[3]; }
+	if (dr < tr + s && dc >= tc + s) { t = pai[1]; }
+	if (dr >= tr + s && dc < tc + s) { t = pai[0]; }
+	if (dr >= tr + s && dc >= tc + s) { t = pai[2]; }
+
+	if (dr < tr + s && dc < tc + s)
+	{
+		ChessBoard(tr, tc, dr, dc, s);
+
+	}
+	else
+	{
+		Board[tr + s - 1][tc + s - 1] = t;
+		ChessBoard( tr, tc, tr + s - 1, tc + s - 1, s);
+	}
+
+	if (dr < tr + s && dc >= tc + s)
+	{
+		ChessBoard( tr, tc + s, dr, dc, s);
+	}
+	else
+	{
+		Board[tr + s - 1][tc + s] = t;
+		ChessBoard(tr, tc + s, tr + s - 1, tc + s, s);
+	}
+
+	if (dr >= tr + s && dc < tc + s)
+	{
+		ChessBoard( tr + s, tc, dr, dc, s);
+	}
+	else
+	{
+		Board[tr + s][tc + s - 1] = t;
+		ChessBoard( tr + s, tc, tr + s, tc + s - 1, s);
+	}
+
+	if (dr >= tr + s && dc >= tc + s)
+	{
+		ChessBoard( tr + s, tc + s, dr, dc, s);
+	}
+	else
+	{
+		Board[tr + s][tc + s] = t;
+		ChessBoard(tr + s, tc + s, tr + s, tc + s, s);
+	}
+}
