@@ -1,0 +1,242 @@
+#include<iostream>
+#include<vector>
+using namespace std;
+class matrix;
+matrix Strassen(const matrix &Aa, const matrix &B);
+
+class matrix
+{
+public:
+	matrix(int n,int b)
+		:N(n)
+	{
+
+		A.resize(N + 1);
+		for (int i = 0; i <= N; i++)
+		{
+			A[i].resize(N + 1);
+		}
+
+		for (int i = 0; i <= N; i++)
+		{
+			for (int o = 0; o <= N; o++)
+			{
+					A[i][o] = -1;
+			}
+		}
+
+	}
+	matrix(int n)
+		:N(n)
+	{
+
+		A.resize(N + 1);
+		for (int i = 0; i <= N; i++)
+		{
+			A[i].resize(N + 1);
+		}
+
+		for (int i = 0; i <= N; i++)
+		{
+			for (int o = 0; o <= N; o++)
+			{
+				if (i == 0 || o == 0)
+				{
+					A[i][o] = -1;
+				}
+				else
+				{
+					cin >> A[i][o];
+				}
+			}
+		}
+
+	}
+	matrix(const matrix &B,int n,int r,int c)
+		:N(n)
+	{
+		
+		A.resize(N + 1);
+		for (int i = 0; i <= N; i++)
+		{
+			A[i].resize(N + 1);
+		}
+
+		for (int i = 0; i <= N; i++)
+		{
+			for (int o = 0; o <= N; o++)
+			{
+				A[i][o] = -1;
+			}
+		}
+		for (int i = 0; i < N; i++)
+		{
+			for (int o = 0; o < N; o++)
+			{
+				A[i+1][o+1] = B.A[i+r][o+c];
+			}
+		}
+
+	}
+	void hebing(matrix &B, int r, int c)
+	{
+		for (int i = 1; i <= B.N; i++)
+		{
+			for (int o = 1; o <= B.N; o++)
+			{
+				A[i + r-1][o + c-1] = B.A[i][o];
+			}
+		}
+	}
+	void printf()
+	{
+		for (int i = 1; i <= N; i++)
+		{
+			for (int o = 1; o <=N; o++)
+			{
+				cout << A[i][o] << " ";
+			}
+			cout << endl;
+		}
+		cout << endl;
+	}
+	matrix& operator=( const matrix& a)
+	{
+		for (int i = 1; i <= N; i++)
+		{
+			for (int o = 1; o <= N; o++)
+			{
+				A[i][o] = a.A[i][o];
+			}
+		}
+		return *this;
+	}
+	matrix operator+(const matrix& a)
+	{
+		matrix C(N, 1);
+		for (int i = 1; i <= N; i++)
+		{
+			for (int o = 1; o <= N; o++)
+			{
+				C.A[i][o] = a.A[i][o] + A[i][o];
+			}
+		}
+		return C;
+	}
+	matrix operator-(const matrix& a)
+	{
+		matrix C(N, 1);
+		for (int i = 1; i <= N; i++)
+		{
+			for (int o = 1; o <= N; o++)
+			{
+				C.A[i][o] = A[i][o]-a.A[i][o] ;
+			}
+		}
+		return C;
+	}
+	matrix operator*(const matrix& a)
+	{
+		matrix C(Strassen(*this, a), N, 1, 1);
+		return C;
+	}
+	~matrix()
+	{
+	}
+
+	vector< vector<int > > A;
+	int N;
+};
+void pr(matrix Aa)
+{
+	for (int i = 1; i <= Aa.N; i++)
+	{
+		for (int o = 1; o <= Aa.N; o++)
+		{
+			cout << Aa.A[i][o] << " ";
+		}
+		cout << endl;
+	}
+	cout << endl;
+}
+matrix Strassen(const matrix &Aa, const matrix &B)
+{
+	
+	if (Aa.N > 2&&Aa.N%2==0)
+	{
+		matrix A11(Aa, Aa.N / 2, 1, 1), A12(Aa, Aa.N / 2, 1, 1+Aa.N / 2), A21(Aa, Aa.N / 2, 1 + Aa.N / 2, 1), A22(Aa, Aa.N / 2, 1 + Aa.N / 2, 1 + Aa.N / 2);
+		matrix B11(B,  B.N  / 2, 1, 1), B12(B, B.N / 2, 1, 1 + Aa.N / 2), B21(B, B.N / 2, 1 + Aa.N / 2, 1), B22(B, B.N / 2, 1 + Aa.N / 2, 1 + Aa.N / 2);
+		
+		cout << " C11 = A11 * B11 + A12 * B21" << endl;
+		matrix C11 = A11 * B11 + A12 * B21;
+		C11.printf();
+
+		cout << "C12 = A11 * B12 + A12 * B22" << endl;
+		matrix C12 = A11 * B12 + A12 * B22;
+		C12.printf();
+
+		cout << "C21 = A21 * B11 + A22 * B21" << endl;
+		matrix C21 = A21 * B11 + A22 * B21;
+		C21.printf();
+
+		cout << " C22 = A21 * B12 + A22 * B22" << endl;
+		matrix C22 = A21 * B12 + A22 * B22;
+		C22.printf();
+
+		matrix D(C11.N * 2, 1);	
+		D.hebing(C11, 1, 1);
+		D.hebing(C12, 1, 1+ C11.N);
+		D.hebing(C21, 1 + C11.N, 1);
+		D.hebing(C22, 1 + C11.N, 1 + C11.N);
+		
+		return D;
+	}
+	else
+	{
+		cout << "A" << endl;
+
+		pr(Aa);
+		cout << "B" << endl;
+		pr(B);
+
+		int A11 = Aa.A[1][1];
+		int A12 = Aa.A[1][2];
+		int A21 = Aa.A[2][1];
+		int A22 = Aa.A[2][2];
+
+		int B11 = B.A[1][1];
+		int B12 = B.A[1][2];
+		int B21 = B.A[2][1];
+		int B22 = B.A[2][2];
+
+		int M1 = A11 * (B12 - B22);
+		int M2 = (A11 + A12)*B22;
+		int M3 = (A21 + A22)*B11;
+		int M4 = A22 * (B21 - B11);
+		int M5 = (A11 + A22)*(B11 + B22);
+		int M6 = (A12 - A22)*(B21 + B22);
+		int M7 = (A11 - A21)*(B11 + B12);
+		int C11 = M5 + M4 - M2 + M6;
+		int C12 = M1 + M2;
+		int C21 = M3 + M4;
+		int C22 = M5 + M1 - M3 - M7;
+		matrix D(2, 1);
+		D.A[1][1] = C11;
+		D.A[1][2] = C12;
+		D.A[2][1] = C21;
+		D.A[2][2] = C22;
+		cout << "D" << endl;
+		D.printf();
+		return D;
+	}
+	
+}
+
+int main()
+{
+	int n = 0;
+	cin >> n;
+	matrix A(n), B(n), C(n, 1);
+	Strassen(A, B).printf();
+	return 0;
+}
