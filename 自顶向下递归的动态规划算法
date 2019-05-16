@@ -1,0 +1,118 @@
+/*
+#include<iostream>
+#define min(a,b) a<b?a:b
+#define MAX 2047000000
+using namespace std;
+class matrix
+{
+public:
+	void Matrix()
+	{
+		cin >> row >> col;
+	}
+	int row, col;
+};
+
+void printff(int st, int end, int **fen)
+{
+	if (fen[st][end] == -1 || end - st + 1 <= 2)
+	{
+		for (int i = st; i <= end; i++)
+		{
+			cout << "A[" << i << "]";
+		}
+	}
+	else
+	{
+		if (fen[st][end] - st + 1 >= 2)
+			cout << "(";
+		printff(st, fen[st][end], fen);
+		if (fen[st][end] - st + 1 >= 2)
+			cout << ")";
+		if (end - fen[st][end] >= 2)
+			cout << "(";
+		printff(fen[st][end] + 1, end, fen);
+		if (end - fen[st][end] >= 2)
+			cout << ")";
+	}
+}
+
+int matrixMultiply3(matrix *S, int **Rec, int **fen, int st, int end)//自顶向下递归的动态规划算法
+{
+	if (end == st)
+	{
+		return 0;
+	}
+	if (end - st + 1 == 2)
+	{
+		Rec[st][end] = S[st].row*S[st].col*S[end].col;
+		return Rec[st][end];
+	}
+	for (int i = st; i < end; i++)//1 1 1 1
+	{
+		if (matrixMultiply3(S, Rec, fen, st, i) + matrixMultiply3(S, Rec, fen, i + 1, end) + S[st].row * S[i].col * S[end].col < Rec[st][end])
+		{
+			fen[st][end] = i;
+		}
+		Rec[st][end] = min(Rec[st][i] + Rec[i + 1][end] + S[st].row * S[i].col * S[end].col, Rec[st][end]);
+	}
+	return Rec[st][end];
+}
+
+int main()
+{
+	int n = 0;
+	cout << "输入矩阵数目:" << endl;
+	cin >> n;
+	matrix *S = new matrix[n + 1];
+	for (int i = 1; i <= n; i++)
+	{
+		cout << "初始化矩阵" << i << endl;
+		S[i].Matrix();
+	}
+
+	int **Rec = new int *[n + 1];//构造记录函数
+	for (int i = 1; i <= n; i++)
+	{
+		Rec[i] = new int[n];
+	}
+	for (int i = 1; i <= n; i++)//初始化记录函数,比计算距离为2的连乘数
+	{
+		for (int o = 1; o <= n; o++)
+		{
+			if (i > o)
+			{
+				Rec[i][o] = -1;
+				continue;
+			}
+			if (i == o)
+			{
+				Rec[i][o] = 0;
+				continue;
+			}
+			Rec[i][o] = MAX;
+			continue;
+		}
+	}
+
+	int **fen = new int*[n + 1];
+	for (int i = 0; i <= n; i++)
+	{
+		fen[i] = new int[n + 1];
+	}
+	for (int i = 1; i <= n; i++)
+	{
+		for (int o = 1; o <= n; o++)
+		{
+			fen[i][o] = -1;
+
+		}
+	}
+
+	cout << matrixMultiply3(S, Rec, fen, 1, n) << endl;
+	printff(1, n, fen);
+	free(fen);
+	free(S);
+	return 0;
+}
+*/

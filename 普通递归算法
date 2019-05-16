@@ -1,0 +1,96 @@
+/*
+#include<iostream>
+#define min(a,b) a<b?a:b
+#define MAX 2047000000
+using namespace std;
+class matrix
+{
+public:
+	void Matrix()
+	{
+		cin >> row >> col;
+	}
+	int row, col;
+};
+
+void printff(int st, int end, int **fen)
+{
+	if (fen[st][end] == -1 || end - st + 1 <= 2)
+	{
+		for (int i = st; i <= end; i++)
+		{
+			cout << "A[" << i << "]";
+		}
+	}
+	else
+	{
+		if (fen[st][end] - st + 1 >= 2)
+			cout << "(";
+		printff(st, fen[st][end], fen);
+		if (fen[st][end] - st + 1 >= 2)
+			cout << ")";
+		if (end - fen[st][end] >= 2)
+			cout << "(";
+		printff(fen[st][end] + 1, end, fen);
+		if (end - fen[st][end] >= 2)
+			cout << ")";
+	}
+}
+
+int matrixMultiply1(matrix *S,  int **fen, int st, int end)//自顶向下递归的动态规划算法
+{
+	if (end == st)
+	{
+		return 0;
+	}
+	if (end - st + 1 == 2)
+	{
+		return S[st].row*S[st].col*S[end].col;
+	}
+	int max = MAX;
+	int u = 0;
+	for (int i = st; i < end; i++)//1 1 1 1
+	{
+		u = matrixMultiply1(S, fen, st, i) + matrixMultiply1(S, fen, i + 1, end) + S[st].row * S[i].col * S[end].col;
+		if (u< max)
+		{
+			fen[st][end] = i;
+			max = u;
+		}
+	}
+	return max;
+}
+
+int main()
+{
+	int n = 0;
+	cout << "输入矩阵数目:" << endl;
+	cin >> n;
+	matrix *S = new matrix[n + 1];
+	for (int i = 1; i <= n; i++)
+	{
+		cout << "初始化矩阵" << i << endl;
+		S[i].Matrix();
+	}
+
+	int **fen = new int*[n + 1];
+	for (int i = 0; i <= n; i++)
+	{
+		fen[i] = new int[n + 1];
+	}
+	for (int i = 1; i <= n; i++)
+	{
+		for (int o = 1; o <= n; o++)
+		{
+			fen[i][o] = -1;
+
+		}
+	}
+
+	cout << matrixMultiply1(S, fen, 1, n) << endl;
+	printff(1, n, fen);
+	free(fen);
+	free(S);
+	return 0;
+}
+*/
