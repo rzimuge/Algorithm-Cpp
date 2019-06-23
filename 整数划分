@@ -1,0 +1,35 @@
+#include<iostream>
+using namespace std;
+
+void swap(char &a, char &b)
+{
+	char temp = '\0';
+	temp = a;
+	a = b;
+	b = temp;
+}
+
+int q(int n, int &count, int max)
+{
+	if (n == 0) { count++; return 1; }
+	for (int i = 1; i <= n; i++)
+	{
+		if (i > max&&max != -1)
+		{
+			break;
+		}
+
+		q(n - i, count, i);
+	}
+	return count;
+}
+
+int main()
+{
+	int n(0), m(0);
+	cin >> n;
+	cout << q(n, m, -1) << endl;
+
+	return 0;
+
+}
