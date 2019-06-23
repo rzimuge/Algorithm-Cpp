@@ -1,0 +1,89 @@
+#include<iostream>
+using namespace std;
+
+
+void Copy(int a[], int b[], int left, int right)
+{
+	for (int i = left; i <= right; i++)
+	{
+		a[i] = b[i];
+	}
+}
+void Merge(int a[], int b[], int left, int m, int right)
+{
+	int i = left, j = m + 1, k = left;
+	while ((i <= m) && (j <= right))
+		if (a[i] <= a[j])
+		{
+			b[k++] = a[i++];
+		}
+		else
+		{
+			b[k++] = a[j++];
+		}
+	if (i > m)
+	{
+		for (int q = j; q <= right; q++)
+		{
+			b[k++] = a[q];
+		}
+	}
+	else
+	{
+		for (int q = i; q <= m; q++)
+		{
+			b[k++] = a[q];
+		}
+	}
+
+}
+void MergePass(int a[], int b[], int s, int n)
+{
+	int i = 0;
+	while (n - i - 1 >= 2 * s)
+	{
+		Merge(a, b, i, i + s - 1, i + 2 * s - 1);
+		i += 2 * s;
+	}
+	if (i + s < n)
+	{
+		Merge(a, b, i, i + s - 1, n - 1);
+	}
+	else
+	{
+		for (int o = i; o <= n - 1; o++)
+		{
+			b[o] = a[o];
+		}
+	}
+}
+void MergeSort(int a[], int n)
+{
+	int s = 1;
+	int *b = new int[n];
+	while (s < n)
+	{
+		MergePass(a, b, s, n);
+		s += s;
+		MergePass(b, a, s, n);
+		s += s;
+	}
+}
+
+
+
+
+int main()
+{
+	int a[10], b[10];
+	for (int i = 0; i < 10; i++)
+	{
+		cin >> a[i];
+	}
+	MergeSort(a, 10);
+	for (int i = 0; i < 10; i++)
+	{
+		cout << a[i] << endl;
+	}
+	return 0;
+}
