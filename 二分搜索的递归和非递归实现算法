@@ -1,0 +1,50 @@
+#include<iostream>
+using namespace std;
+template<class Type>
+
+int BinarySearch(Type a[], const Type& x,int s,int e)//递归
+{
+	int half = (s+e)/2;
+	if (a[half] == x){ return half; }
+	if (a[half] > x)
+	{
+		return BinarySearch(a,x,0,half-1);
+	}
+	else
+	{
+			return BinarySearch(a, x, half + 1, e);
+	}
+	return -1;
+}
+
+
+int BinarySearch(Type a[],const Type& x,int n)//非递归
+{
+	int left = 0, right = n;
+	for (int i = 0; left <= right; i++)
+	{
+		int half = (left + right) / 2;
+		if (x == a[half])
+		{
+			return half;
+		}
+		if (x > a[half])
+		{
+			left = half + 1;
+		}
+		else
+		{
+			right = half - 1;
+		}
+	}
+	return -1;
+
+}
+
+int main()
+{
+	int a[] = { 1156,2789,3154,4453,5489,6465,7159,8456,9159,10264 };
+	cout << BinarySearch(a, 9159,9);
+	return 0;
+
+}
