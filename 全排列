@@ -1,0 +1,38 @@
+#include<iostream>
+using namespace std;
+
+void swap(char &a, char &b)
+{
+	char temp = '\0';
+	temp = a;
+	a = b;
+	b = temp;
+}
+
+void perm(char list[], int s, int e)
+{
+	if (s == e)
+	{
+		for (int i = 0; i < e; i++)
+		{
+			cout << list[i] << " ";
+		}
+		cout << endl;
+	}
+	else
+	{
+		for (int i = s; i < e; i++)
+		{
+			swap(list[s], list[i]);
+			perm(list, i + 1, e);
+			swap(list[s], list[i]);
+		}
+	}
+}
+
+int main()
+{
+	char list[] = { 's','m','d','f','y','e','h' };
+	perm(list, 0, 7);
+	return 0;
+}
